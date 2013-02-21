@@ -158,11 +158,14 @@ popd > /dev/null
 
 nginxconf:
 	@echo "*** $@ ***"
-	pushd .. > /dev/null ; d=nginx ; \
-[ -d $$d ] || mkdir -p $$d; \
-cp pgws/ws/eg/conf/*.conf $$d/ ; \
-sed -i "s|/home/data/sampleapp|$$PWD|g" $$d/*.conf ; \
-popd > /dev/null
+	pushd .. > /dev/null ; d=nginx ; R=$$PWD ; \
+    [ -d $$d ] || mkdir -p $$d; \
+    for f in $$R/pgws/ws/eg/conf/*.conf; \
+        do if [ ! -e $$d/$$(basename $$f) ] ; then \
+            if [[ "$$R" == "/home/data/sampleapp" ]] ; then ln -s $$f -t $$d ; \
+            else cp $$f $$d/ ; sed -i "s|/home/data/sampleapp|$$PWD|g" $$d/*.conf ; fi ;\
+        fi ; done ; \
+	popd > /dev/null
 
 # ------------------------------------------------------------------------------
 
