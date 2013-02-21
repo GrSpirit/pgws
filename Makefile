@@ -161,9 +161,9 @@ nginxconf:
 	pushd .. > /dev/null ; d=nginx ; R=$$PWD ; \
     [ -d $$d ] || mkdir -p $$d; \
     for f in $$R/pgws/ws/eg/conf/*.conf; \
-        do if [ ! -e $$d/$$f] ; then \
-            if [ "$$R" -eq "/home/data/sampleapp" ] ; then ln -s $$R/pgws/ws/eg/conf/$$f $$d/$$f ; \
-            else cp pgws/ws/eg/conf/$$f $$d/ ; sed -i "s|/home/data/sampleapp|$$PWD|g" $$d/*.conf ; fi ;\
+        do if [ ! -e $$d/$$(basename $$f) ] ; then \
+            if [[ "$$R" == "/home/data/sampleapp" ]] ; then ln -s $$f -t $$d ; \
+            else cp $$f $$d/ ; sed -i "s|/home/data/sampleapp|$$PWD|g" $$d/*.conf ; fi ;\
         fi ; done ; \
 	popd > /dev/null
 
